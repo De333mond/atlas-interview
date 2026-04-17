@@ -63,7 +63,8 @@ PERSON_PATTERN = re.compile(
 def normalize_location(value: str | None) -> str | None:
     if not value:
         return None
-    parts = [part.strip() for part in value.split(",")]
+    parts = [cleaned for part in value.split(",") if (cleaned := part.strip())]
+
     return ", ".join(parts) if parts else None
 
 
