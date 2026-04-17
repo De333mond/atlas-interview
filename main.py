@@ -7,8 +7,8 @@ import hashlib
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 
-NAME_CODE = 0
-ALIAS_CODE = 1
+NAME_CODE = "0"
+ALIAS_CODE = "1"
 
 
 @dataclasses.dataclass
@@ -53,10 +53,10 @@ def parse_html(raw: str) -> Tag | None:
 PERSON_PATTERN = re.compile(
     r"^(?P<id>\d+)\.\s+"  # ID
     r"(?P<name>[^,*(\d]+?)\*?\s*,\s*"  # Имя
-    r"(?:\((?P<aliases>[^)]+)\)\s*,\s*)?"  # Алиасы (опционально)
+    r"(?:\((?P<aliases>[^)]+)\)\s*,\s*)?"  # Псевдонимы (опционально)
     r"(?:(?P<birth_date>\d{2}\.\d{2}\.\d{4})\s+г\.р\.\s*)?"  # Дата (опционально)
     r"(?:\s*,\s*(?P<location>.*))?"  # Локация (забирает всё оставшееся)
-    r"\s*;$"  # Строго последняя точка с запятой
+    r"\s*;$"
 )
 
 
@@ -81,7 +81,7 @@ def parse_person(text: str) -> Person | None:
     if data["birth_date"]:
         raw_birth_date = data["birth_date"]
         birth_date = datetime.datetime.strptime(raw_birth_date, "%d.%m.%Y").strftime(
-            "%d-%m-%Y"
+            "%Y-%m-%d"
         )
 
     location = normalize_location(data["location"])
